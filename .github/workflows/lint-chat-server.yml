@@ -1,0 +1,41 @@
+name: Lint Chat Server
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+    paths:
+      - "chat-server/**/*.py"
+      - "chat-server/pyproject.toml"
+      - "chat-server/uv.lock"
+  pull_request:
+    types:
+      - opened
+      - synchronize
+    paths:
+      - "chat-server/**/*.py"
+      - "chat-server/pyproject.toml"
+      - "chat-server/uv.lock"
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+
+      - name: Set up Python
+        working-directory: chat-server
+        run: uv python install
+
+      - name: Install dependencies
+        working-directory: chat-server
+        run: uv sync --group dev
+
+      - name: Run lint
+        working-directory: chat-server
+        run: uv run bash scripts/lint.sh

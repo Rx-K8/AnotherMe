@@ -1,0 +1,76 @@
+name: バグ報告 / Bug Report
+description: |
+  バグを報告する / Report a bug
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        バグ報告ありがとうございます。以下の項目をできるだけ詳しく記入してください。
+        Thank you for reporting a bug. Please fill in the following items as detailed as possible.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: 事前確認 / First Check
+      description: |
+        以下の項目を確認してください。
+        Please confirm the following.
+      options:
+        - label: |
+            GitHub で類似の Issue を検索しましたが、見つかりませんでした。 / I searched and didn't find a similar issue.
+          required: true
+        - label: |
+            最新バージョンで問題が発生しています。 / This bug occurs on the latest version.
+          required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: バグの説明 / Bug Description
+      description: |
+        何が起きましたか？期待した動作と実際の動作を説明してください。
+        What happened? Describe the expected behavior and actual behavior.
+      placeholder: |
+        期待した動作 / Expected: ...
+        実際の動作 / Actual: ...
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: 再現手順 / Steps to Reproduce
+      description: |
+        バグを再現する手順を記載してください。
+        Steps to reproduce the bug.
+      placeholder: |
+        1. ...
+        2. ...
+        3. ...
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: 環境 / Environment
+      description: |
+        OS、Python バージョン、その他関連情報を記載してください。
+        OS, Python version, and other relevant information.
+      placeholder: |
+        - OS: Linux / Windows / macOS
+        - Python: 3.12
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: ログ・エラーメッセージ / Logs / Error Messages
+      description: |
+        関連するログやエラーメッセージがあれば貼り付けてください。
+        Paste any relevant logs or error messages.
+      render: shell
+  - type: textarea
+    id: context
+    attributes:
+      label: 追加情報 / Additional Context
+      description: |
+        その他の情報やスクリーンショットがあれば追加してください。
+        Add any other context or screenshots.

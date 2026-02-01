@@ -1,0 +1,117 @@
+labels: [question]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        このプロジェクトに興味を持っていただきありがとうございます！
+        Thanks for your interest in this project!
+
+        以下の手順に従って、すべての質問に回答してください。
+        Please follow these instructions and fill every question.
+
+        質問への対応や問題解決に多くの時間を費やしているため、構造化された形式でお願いしています。
+        I'm asking this because answering questions consumes most of the time.
+
+        この形式に従うことで、サポートがしやすくなります。
+        By asking questions in a structured way, it will be much easier to help you.
+
+        また、記入していく過程で自己解決できる可能性も高くなります。
+        And there's a high chance that you will find the solution along the way.
+
+        不完全な質問は対応を後回しにさせていただく場合があります。ご協力をお願いいたします。
+        Incomplete questions may be closed. Thank you for your cooperation.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: 事前確認 / First Check
+      description: |
+        以下の項目をすべて確認してください。
+        Please confirm and check all the following options.
+      options:
+        - label: |
+            わかりやすいタイトルをつけました。 / I added a very descriptive title.
+          required: true
+        - label: |
+            GitHub で類似の質問を検索しましたが、見つかりませんでした。 / I searched GitHub and didn't find a similar question.
+          required: true
+        - label: |
+            ドキュメント / README を確認しました。 / I searched in the documentation/README.
+          required: true
+        - label: |
+            Google で検索しましたが、解決しませんでした。 / I searched in Google but didn't find any information.
+          required: true
+        - label: |
+            README のチュートリアルを読みましたが、答えが見つかりませんでした。 / I read the tutorial in the README and didn't find an answer.
+          required: true
+  - type: textarea
+    id: example
+    attributes:
+      label: コード例 / Example Code
+      description: |
+        最小限の再現可能なサンプルコードを追加してください。
+        Please add a self-contained, minimal, reproducible example.
+
+        コピーしてすぐに実行できるコードがあると、サポートしやすくなります。
+        If someone can copy it and run it right away, there's a much higher chance to help you.
+
+      placeholder: |
+        ここにコードを記述してください。 / Write your example code here.
+      render: Text
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: 問題の説明 / Description
+      description: |
+        何が問題ですか？何をしようとしていて、何が起きることを期待していて、実際には何が起きているかを説明してください。
+        What is the problem? Write what you are doing, what you expect to happen, and what is currently happening.
+      placeholder: |
+        * ブラウザで `/` エンドポイントにアクセスしました。 / I opened the browser and called the endpoint `/`.
+        * `{"message": "Hello World"}` が返ってきました。 / It returned `{"message": "Hello World"}`.
+        * しかし、`{"message": "Hello Morty"}` が返ってくることを期待していました。 / But I expected `{"message": "Hello Morty"}`.
+    validations:
+      required: true
+  - type: dropdown
+    id: os
+    attributes:
+      label: オペレーティングシステム / Operating System
+      description: |
+        お使いの OS を選択してください。 / What operating system are you on?
+      multiple: true
+      options:
+        - Linux
+        - Windows
+        - macOS
+        - その他 / Other
+    validations:
+      required: true
+  - type: textarea
+    id: os-details
+    attributes:
+      label: OS の詳細 / Operating System Details
+      description: |
+        OS についての詳細情報を追加してください（特に「その他」を選択した場合）。
+        You can add more details about your operating system here, in particular if you chose "Other".
+    validations:
+      required: true
+  - type: input
+    id: python-version
+    attributes:
+      label: Python バージョン / Python Version
+      description: |
+        お使いの Python バージョンを教えてください。以下のコマンドで確認できます：
+        What Python version are you using? You can find it with:
+
+        ```bash
+        python --version
+        ```
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: 追加情報 / Additional Context
+      description: |
+        スクリーンショットなど、役立つ追加情報があれば記載してください。
+        Add any additional context information or screenshots you think are useful.

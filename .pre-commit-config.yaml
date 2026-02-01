@@ -1,0 +1,51 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: check-added-large-files
+      - id: check-toml
+      - id: check-yaml
+        args:
+          - --unsafe
+      - id: check-json
+        exclude: ^(frontend/)?tsconfig.*\.json$
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+
+  # TODO: ruffは一つだけでできないか？
+  # Python: Chat Server
+  - repo: https://github.com/charliermarsh/ruff-pre-commit
+    rev: v0.14.14
+    hooks:
+      - id: ruff
+        name: ruff-chat-server
+        args:
+          - --fix
+        files: ^chat-server/
+      - id: ruff-format
+        name: ruff-format-chat-server
+        files: ^chat-server/
+
+  # Python: TTS Server
+  - repo: https://github.com/charliermarsh/ruff-pre-commit
+    rev: v0.14.14
+    hooks:
+      - id: ruff
+        name: ruff-tts-server
+        args:
+          - --fix
+        files: ^tts-server/
+      - id: ruff-format
+        name: ruff-format-tts-server
+        files: ^tts-server/
+
+  # TypeScript: Frontend
+  - repo: local
+    hooks:
+      - id: biome-check
+        name: biome check frontend
+        entry: bash -c 'cd frontend && npm run check'
+        language: system
+        types_or: [javascript, jsx, ts, tsx, json]
+        files: ^frontend/
+        pass_filenames: false

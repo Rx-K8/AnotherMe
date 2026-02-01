@@ -1,0 +1,75 @@
+{
+    // Python設定
+    "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
+    "python.terminal.activateEnvironment": true,
+    // Pylance設定(補完のみ、リントはRuffに任せる)
+    "python.analysis.typeCheckingMode": "off",
+    "python.analysis.diagnosticMode": "openFilesOnly",
+    "python.analysis.autoImportCompletions": false,
+    "python.analysis.indexing": true,
+    // Ruff設定
+    "ruff.enable": true,
+    "ruff.lint.enable": true,
+    // autoDocstring設定
+    "autoDocstring.docstringFormat": "google",
+    "autoDocstring.startOnNewLine": false,
+    // Todo Tree設定
+    "todo-tree.general.tags": [
+        "TODO",
+        "FIXME",
+        "NOTE",
+        "HACK",
+        "BUG"
+    ],
+    "todo-tree.highlights.defaultHighlight": {
+        "icon": "alert",
+        "type": "text",
+        "opacity": 50
+    },
+    "todo-tree.highlights.customHighlight": {
+        "TODO": {
+            "icon": "check",
+            "foreground": "#000000",
+            "background": "#ffeb3b"
+        },
+        "FIXME": {
+            "icon": "alert",
+            "foreground": "#ffffff",
+            "background": "#f44336",
+            "iconColour": "#f44336"
+        },
+        "NOTE": {
+            "icon": "note",
+            "foreground": "#000000",
+            "background": "#4caf50",
+            "iconColour": "#4caf50"
+        },
+        "HACK": {
+            "icon": "tools",
+            "foreground": "#000000",
+            "background": "#ff9800",
+            "iconColour": "#ff9800"
+        },
+        "BUG": {
+            "icon": "bug",
+            "foreground": "#ffffff",
+            "background": "#e91e63",
+            "iconColour": "#e91e63"
+        }
+    },
+    // ファイル除外設定
+    "files.exclude": {
+        "**/__pycache__": true,
+        "**/.pytest_cache": true,
+        "**/.mypy_cache": true,
+        "**/.ruff_cache": true
+    },
+    // 検索からの除外設定
+    "search.exclude": {
+        "**/.venv": true,
+        "**/__pycache__": true,
+        "**/.pytest_cache": true,
+        "**/.mypy_cache": true,
+        "**/.ruff_cache": true
+    }
+}

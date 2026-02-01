@@ -1,0 +1,19 @@
+docs:
+  - all:
+    - changed-files:
+      - any-glob-to-any-file:
+        - README.md
+        - release-notes.md
+        - docs/**
+
+internal:
+  - all:
+    - changed-files:
+      - any-glob-to-any-file:
+        - .github/**
+        - .vscode/**
+        - scripts/**
+        - .gitignore
+        - .pre-commit-config.yaml
+      - all-globs-to-all-files:
+        - '!pyproject.toml'

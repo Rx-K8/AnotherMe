@@ -1,0 +1,42 @@
+name: Lint TTS Server
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+    paths:
+      - "tts-server/**/*.py"
+      - "tts-server/pyproject.toml"
+      - "tts-server/uv.lock"
+  pull_request:
+    types:
+      - opened
+      - synchronize
+    paths:
+      - "tts-server/**/*.py"
+      - "tts-server/pyproject.toml"
+      - "tts-server/uv.lock"
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+
+      - name: Install dependencies
+        working-directory: tts-server
+        run: uv sync --group dev
+
+      - name: Run lint
+        working-directory: tts-server
+        run: uv run ./scripts/lint.sh
