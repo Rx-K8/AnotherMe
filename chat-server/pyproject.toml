@@ -20,31 +20,7 @@ dev = [
     "ruff==0.14.8",
 ]
 
-[tool.mypy]
-strict = true
-exclude = ["venv", ".venv"]
-
-[tool.ruff]
-target-version = "py313"
-line-length = 88  # Blackのデフォルトと同じ
-
-[tool.ruff.lint]
-select = [
-    "E",      # pycodestyleエラー
-    "W",      # pycodestyle警告
-    "F",      # pyflakes
-    "I",      # isort
-    "B",      # flake8-bugbear
-    "C4",     # flake8-comprehensions
-    "UP",     # pyupgrade
-    "ARG001", # 関数内の未使用引数
-    "T201",   # print文を許可しない
-]
-ignore = [
-    "B008",  # 引数のデフォルト値で関数呼び出しを行わない
-    "W191",  # インデントにタブが含まれる
-    "B904",  # from eなしで例外を発生させることを許可(HTTPException用)
-]
+# Lint設定はルートのpyproject.tomlで統一管理
 
 [tool.uv.sources]
 torch = { index = "pytorch-cu128" }

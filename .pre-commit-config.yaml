@@ -12,32 +12,16 @@ repos:
       - id: end-of-file-fixer
       - id: trailing-whitespace
 
-  # TODO: ruffは一つだけでできないか？
-  # Python: Chat Server
+  # Python: 統一Ruff設定（chat-server & tts-server）
   - repo: https://github.com/charliermarsh/ruff-pre-commit
     rev: v0.14.14
     hooks:
       - id: ruff
-        name: ruff-chat-server
         args:
           - --fix
-        files: ^chat-server/
+        files: ^(chat-server|tts-server)/.*\.py$
       - id: ruff-format
-        name: ruff-format-chat-server
-        files: ^chat-server/
-
-  # Python: TTS Server
-  - repo: https://github.com/charliermarsh/ruff-pre-commit
-    rev: v0.14.14
-    hooks:
-      - id: ruff
-        name: ruff-tts-server
-        args:
-          - --fix
-        files: ^tts-server/
-      - id: ruff-format
-        name: ruff-format-tts-server
-        files: ^tts-server/
+        files: ^(chat-server|tts-server)/.*\.py$
 
   # TypeScript: Frontend
   - repo: local
