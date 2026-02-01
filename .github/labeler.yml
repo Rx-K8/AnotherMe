@@ -1,31 +1,14 @@
-# コンポーネントラベル
-frontend:
-  - changed-files:
-    - any-glob-to-any-file: 'frontend/**'
+# タイプラベル（ファイルパスベース）
+# 注: breaking、security、feature、bug、refactor、upgradeラベルは
+# コミットメッセージの内容に基づくため、手動で付与してください
 
-chat-server:
-  - changed-files:
-    - any-glob-to-any-file: 'chat-server/**'
-
-tts-server:
-  - changed-files:
-    - any-glob-to-any-file: 'tts-server/**'
-
-# モノレポ横断的な変更
-monorepo:
-  - changed-files:
-    - any-glob-to-any-file:
-      - 'pyproject.toml'
-      - 'scripts/**'
-      - '.pre-commit-config.yaml'
-
-# 機能ラベル（既存のものを統合）
 docs:
   - changed-files:
     - any-glob-to-any-file:
       - '**/README.md'
-      - 'docs/release-notes.md'
+      - '**/CHANGELOG.md'
       - 'docs/**'
+      - '**/*.md'
 
 internal:
   - changed-files:
@@ -35,5 +18,7 @@ internal:
       - 'scripts/**'
       - '.gitignore'
       - '.pre-commit-config.yaml'
-    - all-globs-to-all-files:
-      - '!**/pyproject.toml'
+      - 'pyproject.toml'
+      - '**/pyproject.toml'
+      - 'uv.lock'
+      - '**/uv.lock'
