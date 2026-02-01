@@ -1,13 +1,12 @@
-interface TTSRequest {
+interface VoiceCloneRequest {
+  audio_file: File
   input: string
-  response_format?: "wav" | "mp3"
+  ref_text: string
   speed?: number
 }
 
-interface TTSResponse {
+interface VoiceCloneResponse {
   audio_data: string
-  format: string
-  sample_rate: number
 }
 
 interface TTSErrorResponse {
@@ -17,13 +16,18 @@ interface TTSErrorResponse {
 
 const API_BASE_URL = "http://localhost:8001"
 
-export const textToSpeech = async (request: TTSRequest): Promise<TTSResponse> => {
-  const response = await fetch(`${API_BASE_URL}/api/tts/synthesize`, {
+export const voiceClone = async (
+  request: VoiceCloneRequest,
+): Promise<VoiceCloneResponse> => {
+  const formData = new FormData()
+  formData.append("audio_file", request.audio_file)
+  formData.append("input", request.input)
+  formData.append("ref_text", request.ref_text)
+  formData.append("speed", (request.speed || 1.0).toString())
+
+  const response = await fetch(`${API_BASE_URL}/api/tts/voice-clone`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(request),
+    body: formData,
   })
 
   if (!response.ok) {

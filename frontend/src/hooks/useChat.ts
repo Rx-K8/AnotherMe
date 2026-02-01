@@ -2,13 +2,22 @@ import { useState } from "react"
 import { createChatCompletion, type Message } from "@/api/chatApi"
 import { useTTS } from "./useTTS"
 
-export function useChat() {
+interface UseChatOptions {
+  ttsConfig?: {
+    audioFile: File | null
+    refText: string
+    speed: number
+    enabled: boolean
+  }
+}
+
+export function useChat(options?: UseChatOptions) {
   const [messages, setMessages] = useState<Message[]>([])
   const [inputText, setInputText] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const { speak, isGenerating: isGeneratingAudio } = useTTS()
 
-  const sendMessage = async (enableTTS = true) => {
+  const sendMessage = async () => {
     if (!inputText.trim()) return
 
     const userMessage: Message = {
@@ -31,8 +40,18 @@ export function useChat() {
       }
       setMessages((prev) => [...prev, aiMessage])
 
-      if (enableTTS && aiMessage.content) {
-        speak(aiMessage.content).catch(console.error)
+      const ttsConfig = options?.ttsConfig
+      if (
+        ttsConfig?.enabled &&
+        ttsConfig.audioFile &&
+        ttsConfig.refText.trim() &&
+        aiMessage.content
+      ) {
+        speak(aiMessage.content, {
+          audioFile: ttsConfig.audioFile,
+          refText: ttsConfig.refText,
+          speed: ttsConfig.speed,
+        }).catch(console.error)
       }
     } catch (error) {
       console.error("チャット送信エラー:", error)
