@@ -58,9 +58,6 @@ dmypy.json
 # Jupyter Notebook
 .ipynb_checkpoints
 
-# pyenv
-.python-version
-
 # Node.js / JavaScript
 node_modules/
 npm-debug.log*

@@ -30,7 +30,6 @@ ignore = [
 [tool.ruff.lint.mccabe]
 max-complexity = 10
 
-# 統一mypy設定（strict mode）
 [tool.mypy]
 strict = true
 python_version = "3.12"
