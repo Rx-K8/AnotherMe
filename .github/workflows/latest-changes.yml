@@ -44,5 +44,6 @@ jobs:
               {"label": "refactor", "header": "Refactors"},
               {"label": "upgrade", "header": "Upgrades"},
               {"label": "docs", "header": "Docs"},
+              {"label": "chore", "header": "Chores"},
               {"label": "internal", "header": "Internal"}
             ]
