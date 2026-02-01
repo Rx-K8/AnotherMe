@@ -70,7 +70,7 @@ export function TTSSettings({
       )}
 
       <div className="flex flex-col gap-2">
-        <label className="text-sm font-medium">参照音声ファイル</label>
+        <label htmlFor="audio-file-input" className="text-sm font-medium">参照音声ファイル</label>
         {audioFile ? (
           <div className="flex items-center gap-2">
             <span className="text-sm text-gray-700 flex-1">{audioFile.name}</span>
@@ -80,6 +80,7 @@ export function TTSSettings({
           </div>
         ) : (
           <input
+            id="audio-file-input"
             type="file"
             accept=".wav,.mp3"
             onChange={handleFileChange}
@@ -89,8 +90,9 @@ export function TTSSettings({
       </div>
 
       <div className="flex flex-col gap-2">
-        <label className="text-sm font-medium">参照音声の書き起こし</label>
+        <label htmlFor="ref-text-input" className="text-sm font-medium">参照音声の書き起こし</label>
         <Textarea
+          id="ref-text-input"
           placeholder="参照音声のテキスト書き起こしを入力してください"
           value={refText}
           onChange={(e) => setRefText(e.target.value)}
@@ -99,8 +101,9 @@ export function TTSSettings({
       </div>
 
       <div className="flex flex-col gap-2">
-        <label className="text-sm font-medium">再生速度: {speed.toFixed(1)}x</label>
+        <label htmlFor="speed-input" className="text-sm font-medium">再生速度: {speed.toFixed(1)}x</label>
         <input
+          id="speed-input"
           type="range"
           min="0.5"
           max="2.0"
