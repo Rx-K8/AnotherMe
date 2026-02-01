@@ -8,6 +8,20 @@ body:
       value: |
         機能リクエストありがとうございます。以下の項目を記入してください。
         Thank you for your feature request. Please fill in the following items.
+  - type: dropdown
+    id: component
+    attributes:
+      label: コンポーネント / Component
+      description: |
+        機能を追加したいコンポーネントを選択してください。
+        Select the component where you want this feature.
+      options:
+        - Frontend
+        - Chat Server
+        - TTS Server
+        - Infrastructure / モノレポ全体
+    validations:
+      required: true
   - type: checkboxes
     id: checks
     attributes:

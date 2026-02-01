@@ -20,6 +20,21 @@ body:
 
         不完全な質問は対応を後回しにさせていただく場合があります。ご協力をお願いいたします。
         Incomplete questions may be closed. Thank you for your cooperation.
+  - type: dropdown
+    id: component
+    attributes:
+      label: コンポーネント / Component
+      description: |
+        質問対象のコンポーネントを選択してください。
+        Select the component your question is about.
+      options:
+        - Frontend
+        - Chat Server
+        - TTS Server
+        - Infrastructure / モノレポ全体
+        - 不明 / Not sure
+    validations:
+      required: true
   - type: checkboxes
     id: checks
     attributes:
@@ -100,14 +115,23 @@ body:
     attributes:
       label: Python バージョン / Python Version
       description: |
-        お使いの Python バージョンを教えてください。以下のコマンドで確認できます：
-        What Python version are you using? You can find it with:
+        お使いの Python バージョンを教えてください（Python関連の質問の場合）。
+        What Python version are you using (if Python-related)?
 
         ```bash
         python --version
         ```
-    validations:
-      required: true
+  - type: input
+    id: node-version
+    attributes:
+      label: Node.js バージョン / Node.js Version
+      description: |
+        お使いの Node.js バージョンを教えてください（Frontend関連の質問の場合）。
+        What Node.js version are you using (if Frontend-related)?
+
+        ```bash
+        node --version
+        ```
   - type: textarea
     id: context
     attributes:

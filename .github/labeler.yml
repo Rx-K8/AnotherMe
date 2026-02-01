@@ -1,0 +1,39 @@
+# コンポーネントラベル
+frontend:
+  - changed-files:
+    - any-glob-to-any-file: 'frontend/**'
+
+chat-server:
+  - changed-files:
+    - any-glob-to-any-file: 'chat-server/**'
+
+tts-server:
+  - changed-files:
+    - any-glob-to-any-file: 'tts-server/**'
+
+# モノレポ横断的な変更
+monorepo:
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'pyproject.toml'
+      - 'scripts/**'
+      - '.pre-commit-config.yaml'
+
+# 機能ラベル（既存のものを統合）
+docs:
+  - changed-files:
+    - any-glob-to-any-file:
+      - '**/README.md'
+      - 'docs/release-notes.md'
+      - 'docs/**'
+
+internal:
+  - changed-files:
+    - any-glob-to-any-file:
+      - '.github/**'
+      - '.vscode/**'
+      - 'scripts/**'
+      - '.gitignore'
+      - '.pre-commit-config.yaml'
+    - all-globs-to-all-files:
+      - '!**/pyproject.toml'
