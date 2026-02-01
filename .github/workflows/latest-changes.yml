@@ -1,0 +1,48 @@
+name: Latest Changes
+
+on:
+  pull_request_target:
+    branches:
+      - develop
+    types:
+      - closed
+  workflow_dispatch:
+    inputs:
+      number:
+        description: PR number
+        required: true
+
+permissions:
+  contents: write
+  pull-requests: read
+
+jobs:
+  latest-changes:
+    # マージされたPRのみ処理
+    if: github.event.pull_request.merged == true || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update release notes
+        uses: tiangolo/latest-changes@0.4.1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          latest_changes_file: docs/release-notes.md
+          latest_changes_header: "## Latest Changes"
+          end_regex: "^## "
+          label_header_prefix: "### "
+          labels: >
+            [
+              {"label": "breaking", "header": "Breaking Changes"},
+              {"label": "security", "header": "Security Fixes"},
+              {"label": "feature", "header": "Features"},
+              {"label": "bug", "header": "Fixes"},
+              {"label": "refactor", "header": "Refactors"},
+              {"label": "upgrade", "header": "Upgrades"},
+              {"label": "docs", "header": "Docs"},
+              {"label": "internal", "header": "Internal"}
+            ]

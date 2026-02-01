@@ -8,6 +8,20 @@ body:
       value: |
         バグ報告ありがとうございます。以下の項目をできるだけ詳しく記入してください。
         Thank you for reporting a bug. Please fill in the following items as detailed as possible.
+  - type: dropdown
+    id: component
+    attributes:
+      label: コンポーネント / Component
+      description: |
+        問題が発生しているコンポーネントを選択してください。
+        Select the component where the issue is occurring.
+      options:
+        - Frontend
+        - Chat Server
+        - TTS Server
+        - Infrastructure / モノレポ全体
+    validations:
+      required: true
   - type: checkboxes
     id: checks
     attributes:
@@ -52,11 +66,12 @@ body:
     attributes:
       label: 環境 / Environment
       description: |
-        OS、Python バージョン、その他関連情報を記載してください。
-        OS, Python version, and other relevant information.
+        OS、Python バージョン、Node.js バージョン、その他関連情報を記載してください。
+        OS, Python version, Node.js version, and other relevant information.
       placeholder: |
         - OS: Linux / Windows / macOS
         - Python: 3.12
+        - Node.js: 20
     validations:
       required: true
   - type: textarea

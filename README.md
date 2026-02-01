@@ -102,13 +102,54 @@ Pre-commit hooks are automatically installed during setup. They will:
 - PyTorch (CUDA 12.4)
 - uv package manager
 
+## CI/CD
+
+このモノレポでは、以下のGitHub Actionsワークフローを使用しています。
+
+### コンポーネント別ワークフロー
+
+変更されたコンポーネントに対して自動実行されます：
+
+- **Lint Frontend** - フロントエンドのlint（`frontend/` 変更時に自動実行）
+- **Lint Chat Server** - チャットサーバーのlint（`chat-server/` 変更時に自動実行）
+- **Lint TTS Server** - TTSサーバーのlint（`tts-server/` 変更時に自動実行）
+- **Test TTS Server** - TTSサーバーのテスト（`tts-server/` 変更時に自動実行）
+
+### モノレポ横断ワークフロー
+
+すべてのコンポーネントに影響する機能：
+
+- **Labels** - PRに自動でコンポーネントラベル（frontend/chat-server/tts-server/monorepo）を付与
+- **Latest Changes** - コンポーネント別のrelease-notes.mdを自動更新
+- **Coverage Report** - テストカバレッジを可視化（Smokeshow）
+
+### 統合ワークフロー（手動実行）
+
+全プロジェクトを一括で検証：
+
+- **Lint All Projects** - 全プロジェクトのlintを一括実行
+- **Test All Projects** - 全プロジェクトのテストを一括実行
+
+### パスフィルタリング
+
+ワークフローは以下のファイル変更時にもトリガーされます：
+
+- ルートの `pyproject.toml` - 全Pythonプロジェクトのlint設定に影響
+- `.pre-commit-config.yaml` - pre-commitフック設定
+- `scripts/lint-all.sh`, `scripts/test-all.sh` - 統合スクリプト
+- 各ワークフローファイル自体の変更
+
+### Issue/PRテンプレート
+
+- **バグ報告** - コンポーネントを選択してバグを報告
+- **機能リクエスト** - コンポーネントを選択して新機能を提案
+- **質問** - Discussionsで質問（コンポーネント選択可能）
+
 ## Documentation
 
 - [frontend/README.md](frontend/README.md) - Frontend documentation
 - [chat-server/README.md](chat-server/README.md) - Chat Server documentation
 - [tts-server/README.md](tts-server/README.md) - TTS Server documentation
-- [chat-server/DEVELPMENT.md](chat-server/DEVELPMENT.md) - Development guide
-- [tts-server/DEVELPMENT.md](tts-server/DEVELPMENT.md) - Development guide
 
 ## License
 

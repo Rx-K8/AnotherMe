@@ -40,8 +40,6 @@ testpaths = ["tests"]
 asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "function"
 
-# Lint設定はルートのpyproject.tomlで統一管理
-
 # プロジェクト固有の例外
 [tool.ruff.lint.per-file-ignores]
 "app/api/routes/demo.py" = ["E501"]  # HTMLテンプレートの行長を許容

@@ -3,23 +3,27 @@ name: Lint Frontend
 on:
   push:
     branches:
-      - main
       - develop
+      - main
     paths:
       - "frontend/**"
+      - "scripts/lint-all.sh"
+      - ".github/workflows/lint-frontend.yml"
   pull_request:
     types:
       - opened
       - synchronize
     paths:
       - "frontend/**"
+      - "scripts/lint-all.sh"
+      - ".github/workflows/lint-frontend.yml"
 
 jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Node.js
         uses: actions/setup-node@v4

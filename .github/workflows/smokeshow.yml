@@ -1,42 +1,27 @@
-name: Smokeshow
+name: Coverage Report
 
 on:
   workflow_run:
-    workflows: [Test]
+    workflows: [Test TTS Server]
     types: [completed]
 
 jobs:
   smokeshow:
-    runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
     permissions:
-      actions: read
-      contents: read
       statuses: write
-
     steps:
-      - uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/checkout@v5
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
+      - run: pip install smokeshow
 
-      - name: Install smokeshow
-        run: pip install smokeshow
-
-      - name: Download coverage artifact
-        uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v4
         with:
-          name: coverage-html
-          path: htmlcov
           github-token: ${{ secrets.GITHUB_TOKEN }}
           run-id: ${{ github.event.workflow_run.id }}
 
-      - name: Upload coverage to Smokeshow
-        run: smokeshow upload htmlcov
+      - run: smokeshow upload coverage-html
         env:
           SMOKESHOW_GITHUB_STATUS_DESCRIPTION: Coverage {coverage-percentage}
           SMOKESHOW_GITHUB_COVERAGE_THRESHOLD: 50
