@@ -1,6 +1,6 @@
 # AnotherMe - AI Avatar Platform
 
-[![TTS Server Coverage](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/Rx-K8/ac2cfc2237210a437cb17a73d5d4c2a3/raw/tts-server-coverage.json)](https://github.com/Rx-K8/AnotherMe/actions/workflows/test-tts-server.yml)
+[![TTS Server Coverage](https://coverage-badge.samuelcolvin.workers.dev/Rx-K8/AnotherMe.svg?match=tts-server)](https://coverage-badge.samuelcolvin.workers.dev/redirect/Rx-K8/AnotherMe?match=tts-server)
 
 A monorepo containing the full AnotherMe platform: Frontend, Chat Server, and TTS Server.
 
