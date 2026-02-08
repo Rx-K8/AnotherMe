@@ -44,7 +44,7 @@ jobs:
 
       - name: Run tests
         working-directory: tts-server
-        run: uv run pytest tests/ -v --tb=short --cov --cov-report=term-missing --cov-report=html
+        run: uv run --extra cpu pytest tests/ -v --tb=short --cov --cov-report=term-missing --cov-report=html
 
       - name: Store coverage files
         uses: actions/upload-artifact@v4
@@ -55,14 +55,14 @@ jobs:
 
       - name: Coverage report
         working-directory: tts-server
-        run: uv run coverage report
+        run: uv run --extra cpu coverage report
 
       - name: Extract coverage percentage
         if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
         id: coverage
         working-directory: tts-server
         run: |
-          COVERAGE=$(uv run coverage report --format=total)
+          COVERAGE=$(uv run --extra cpu coverage report --format=total)
           echo "total=${COVERAGE}" >> "$GITHUB_OUTPUT"
           echo "Coverage: ${COVERAGE}%"
 

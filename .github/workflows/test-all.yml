@@ -23,4 +23,4 @@ jobs:
         run: ./scripts/setup.sh --ci
 
       - name: Run test-all
-        run: ./scripts/test-all.sh
+        run: ./scripts/test-all.sh --ci
