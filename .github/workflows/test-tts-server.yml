@@ -57,24 +57,3 @@ jobs:
         working-directory: tts-server
         run: uv run --extra cpu coverage report
 
-      - name: Extract coverage percentage
-        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
-        id: coverage
-        working-directory: tts-server
-        run: |
-          COVERAGE=$(uv run --extra cpu coverage report --format=total)
-          echo "total=${COVERAGE}" >> "$GITHUB_OUTPUT"
-          echo "Coverage: ${COVERAGE}%"
-
-      - name: Update coverage badge
-        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
-        uses: schneegans/dynamic-badges-action@v1.7.0
-        with:
-          auth: ${{ secrets.GIST_TOKEN }}
-          gistID: ac2cfc2237210a437cb17a73d5d4c2a3
-          filename: tts-server-coverage.json
-          label: "coverage: tts-server"
-          message: "${{ steps.coverage.outputs.total }}%"
-          valColorRange: ${{ steps.coverage.outputs.total }}
-          minColorRange: 0
-          maxColorRange: 100
