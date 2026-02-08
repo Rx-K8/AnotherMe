@@ -17,6 +17,7 @@
 
 ### Internal
 
+* chore: pre-commit hookで代替される冗長スクリプトを削除. PR [#14](https://github.com/Rx-K8/AnotherMe/pull/14) by [@Rx-K8](https://github.com/Rx-K8).
 * test: chat-serverにpytestテスト基盤を追加. PR [#11](https://github.com/Rx-K8/AnotherMe/pull/11) by [@Rx-K8](https://github.com/Rx-K8).
 * ci: カバレッジバッジをSmokeshow連携のcoverage-badgeに移行. PR [#10](https://github.com/Rx-K8/AnotherMe/pull/10) by [@Rx-K8](https://github.com/Rx-K8).
 * ci: 重複するlint-all/test-allワークフローを削除. PR [#9](https://github.com/Rx-K8/AnotherMe/pull/9) by [@Rx-K8](https://github.com/Rx-K8).
