@@ -15,20 +15,48 @@ dependencies = [
 [project.optional-dependencies]
 cpu = [
     "torch==2.9.0",
-    "torchvision==0.24.0",
 ]
 cu128 = [
     "torch==2.9.0",
-    "torchvision==0.24.0",
 ]
 
 [dependency-groups]
 dev = [
+    "httpx>=0.28.0",
     "mypy==1.19.0",
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.25.0",
+    "pytest-cov>=6.0.0",
     "ruff==0.14.8",
 ]
 
 # Lint設定はルートのpyproject.tomlで統一管理
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+markers = [
+    "unit: 単体テスト (CPU, 高速)",
+    "integration: 統合テスト (CPU, MockLLM使用)",
+    "gpu: GPU依存テスト (CI除外)",
+]
+
+[tool.coverage.run]
+source = ["app"]
+dynamic_context = "test_function"
+
+[tool.coverage.report]
+show_missing = true
+sort = "-Cover"
+omit = [
+    "app/main.py",
+    "app/llm/gemma3.py",
+    "app/llm/qwen3.py",
+]
+
+[tool.coverage.html]
+show_contexts = true
 
 [tool.uv]
 conflicts = [
@@ -40,10 +68,6 @@ conflicts = [
 
 [tool.uv.sources]
 torch = [
-    { index = "pytorch-cpu", extra = "cpu" },
-    { index = "pytorch-cu128", extra = "cu128" },
-]
-torchvision = [
     { index = "pytorch-cpu", extra = "cpu" },
     { index = "pytorch-cu128", extra = "cu128" },
 ]
