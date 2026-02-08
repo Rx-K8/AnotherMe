@@ -14,7 +14,7 @@ interface TTSErrorResponse {
   detail?: string | null
 }
 
-const API_BASE_URL = "http://localhost:8001"
+const API_BASE_URL = import.meta.env.VITE_TTS_API_BASE_URL
 
 export const voiceClone = async (
   request: VoiceCloneRequest,

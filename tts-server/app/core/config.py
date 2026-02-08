@@ -16,6 +16,9 @@ class Settings(BaseSettings):
     )
 
     ENABLE_DEMO: bool = False
+    server_host: str
+    server_port: int
+    cors_origins: list[str]
 
 
 settings = Settings()
