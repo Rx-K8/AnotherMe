@@ -11,6 +11,10 @@
 
 * fix: MockLLMProviderのパラメータ名をmax_new_tokensに修正. PR [#4](https://github.com/Rx-K8/AnotherMe/pull/4) by [@Rx-K8](https://github.com/Rx-K8).
 
+### Docs
+
+* docs: カバレッジバッジにサーバー名ラベルを追加. PR [#12](https://github.com/Rx-K8/AnotherMe/pull/12) by [@Rx-K8](https://github.com/Rx-K8).
+
 ### Internal
 
 * test: chat-serverにpytestテスト基盤を追加. PR [#11](https://github.com/Rx-K8/AnotherMe/pull/11) by [@Rx-K8](https://github.com/Rx-K8).
