@@ -5,11 +5,10 @@ echo "=== AnotherMe Monorepo Setup ==="
 echo ""
 
 # --ci フラグで CPU 版 PyTorch を使用（GPU なし環境向け）
-TORCH_EXTRA="cu128"
-TTS_TORCH_EXTRA="cu124"
+# デフォルトでは marker ベースで Linux=CUDA が自動選択される
+CI_MODE=false
 if [ "$1" = "--ci" ]; then
-    TORCH_EXTRA="cpu"
-    TTS_TORCH_EXTRA="cpu"
+    CI_MODE=true
     echo "Mode: CI (CPU-only PyTorch)"
 else
     echo "Mode: Local (GPU PyTorch)"
@@ -29,14 +28,22 @@ echo ""
 echo "2. Setting up Chat Server..."
 cd chat-server
 uv python install
-uv sync --extra "$TORCH_EXTRA" --group dev
+if [ "$CI_MODE" = true ]; then
+    uv sync --group dev --index pytorch-cu128=https://download.pytorch.org/whl/cpu
+else
+    uv sync --group dev
+fi
 cd ..
 
 echo ""
 echo "3. Setting up TTS Server..."
 cd tts-server
 uv python install
-uv sync --extra "$TTS_TORCH_EXTRA" --group dev
+if [ "$CI_MODE" = true ]; then
+    uv sync --group dev --index pytorch-cu124=https://download.pytorch.org/whl/cpu
+else
+    uv sync --group dev
+fi
 cd ..
 
 echo ""
@@ -44,7 +51,7 @@ echo "4. Installing pre-commit hooks..."
 command -v pre-commit >/dev/null 2>&1 && pre-commit install || echo "pre-commit not found, skipping..."
 
 echo ""
-echo "✓ Setup complete!"
+echo "Setup complete!"
 echo ""
 echo "Usage:"
 echo "  Local (GPU):  ./scripts/setup.sh"
