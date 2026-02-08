@@ -10,7 +10,7 @@ class TestSettings:
     def test_load_from_env_vars(self) -> None:
         with patch.dict(
             "os.environ",
-            {"APP_NAME": "test-app", "LLM_MODEL_NAME": "mock"},
+            {"APP_NAME": "test-app", "LLM_MODEL_NAME": "mock", "SERVER_HOST": "0.0.0.0", "SERVER_PORT": "8000", "CORS_ORIGINS": '["*"]'},
             clear=False,
         ):
             settings = Settings()  # type: ignore[call-arg]
@@ -31,7 +31,7 @@ class TestGetSettings:
         get_settings.cache_clear()
         with patch.dict(
             "os.environ",
-            {"APP_NAME": "test-app", "LLM_MODEL_NAME": "mock"},
+            {"APP_NAME": "test-app", "LLM_MODEL_NAME": "mock", "SERVER_HOST": "0.0.0.0", "SERVER_PORT": "8000", "CORS_ORIGINS": '["*"]'},
             clear=False,
         ):
             settings = get_settings()

@@ -46,4 +46,8 @@ jobs:
 
       - name: Run lint
         working-directory: tts-server
+        env:
+          SERVER_HOST: "0.0.0.0"
+          SERVER_PORT: "8001"
+          CORS_ORIGINS: '["*"]'
         run: uv run ./scripts/lint.sh
