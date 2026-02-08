@@ -40,7 +40,7 @@ jobs:
 
       - name: Install dependencies
         working-directory: tts-server
-        run: uv sync --group dev
+        run: uv sync --extra cpu --group dev
 
       - name: Run tests
         working-directory: tts-server
