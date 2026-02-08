@@ -8,7 +8,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api.main import api_router
+from app.api.main import api_router, demo_router
 from app.core.config import settings
 from app.lipsync.factory import create_provider
 from app.services.lipsync_service import LipsyncService
@@ -44,6 +44,9 @@ def create_app() -> FastAPI:
         lifespan=lifespan,
     )
     app.include_router(api_router)
+
+    if demo_router is not None:
+        app.include_router(demo_router)
 
     app.add_middleware(
         CORSMiddleware,

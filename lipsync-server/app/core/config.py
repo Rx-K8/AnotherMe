@@ -24,6 +24,7 @@ class Settings(BaseSettings):
     provider_name: str = "musetalk"
     use_float16: bool = True
     batch_size: int = 8
+    enable_demo: bool = False
 
 
 settings = Settings()
