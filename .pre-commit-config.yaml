@@ -12,16 +12,16 @@ repos:
       - id: end-of-file-fixer
       - id: trailing-whitespace
 
-  # Python: 統一Ruff設定（chat-server & tts-server）
+  # Python: 統一Ruff設定（chat-server, tts-server, lipsync-server）
   - repo: https://github.com/charliermarsh/ruff-pre-commit
     rev: v0.14.14
     hooks:
       - id: ruff
         args:
           - --fix
-        files: ^(chat-server|tts-server)/.*\.py$
+        files: ^(chat-server|tts-server|lipsync-server)/.*\.py$
       - id: ruff-format
-        files: ^(chat-server|tts-server)/.*\.py$
+        files: ^(chat-server|tts-server|lipsync-server)/.*\.py$
 
   # TypeScript: Frontend
   - repo: local
