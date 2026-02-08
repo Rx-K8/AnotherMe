@@ -15,6 +15,8 @@ import re
 import sys
 import tempfile
 from argparse import Namespace
+from collections.abc import Iterator
+from contextlib import contextmanager
 from pathlib import Path
 from typing import Any
 
@@ -75,11 +77,29 @@ class MuseTalkProvider(LipsyncProvider):
         if model_dir_str not in sys.path:
             sys.path.insert(0, model_dir_str)
 
+    @contextmanager
+    def _chdir_musetalk(self) -> Iterator[None]:
+        """CWD を MuseTalk ルートに一時変更する
+
+        MuseTalk の preprocessing.py や face_parsing が
+        相対パス（./musetalk/utils/dwpose/... 等）で
+        モデルを参照するため、import 時・実行時に CWD が
+        MuseTalk ルートである必要がある。
+        """
+        prev_cwd = os.getcwd()
+        os.chdir(self._model_dir)
+        try:
+            yield
+        finally:
+            os.chdir(prev_cwd)
+
     def load_models(self) -> None:
         """全モデルをロードする（同期メソッド）
 
         MuseTalk の import をここで動的に行うため、
         CI 環境でもクラスの import 自体は成功する。
+        preprocessing.py がモジュールレベルで相対パスを使って
+        init_model() を呼ぶため、CWD を MuseTalk ルートに変更する。
         """
         if self._loaded:
             return
@@ -87,21 +107,24 @@ class MuseTalkProvider(LipsyncProvider):
         self._setup_sys_path()
 
         import torch
-        from musetalk.utils.audio_processor import AudioProcessor
-        from musetalk.utils.blending import get_image
-        from musetalk.utils.face_parsing import FaceParsing
-        from musetalk.utils.preprocessing import (
-            coord_placeholder,
-            get_bbox_range,
-            get_landmark_and_bbox,
-            read_imgs,
-        )
-        from musetalk.utils.utils import (
-            datagen,
-            get_file_type,
-            get_video_fps,
-            load_all_model,
-        )
+
+        with self._chdir_musetalk():
+            from musetalk.utils.audio_processor import AudioProcessor
+            from musetalk.utils.blending import get_image
+            from musetalk.utils.face_parsing import FaceParsing
+            from musetalk.utils.preprocessing import (
+                coord_placeholder,
+                get_bbox_range,
+                get_landmark_and_bbox,
+                read_imgs,
+            )
+            from musetalk.utils.utils import (
+                datagen,
+                get_file_type,
+                get_video_fps,
+                load_all_model,
+            )
+
         from transformers import WhisperModel
 
         # ユーティリティ関数を保持
@@ -245,10 +268,13 @@ class MuseTalkProvider(LipsyncProvider):
                 input_img_list, bbox_shift
             )
 
-            fp = self._FaceParsing(
-                left_cheek_width=args.left_cheek_width,
-                right_cheek_width=args.right_cheek_width,
-            )
+            # FaceParsing.model_init() が ./models/face-parse-bisent/ を参照するため
+            # CWD を MuseTalk ルートに変更する
+            with self._chdir_musetalk():
+                fp = self._FaceParsing(
+                    left_cheek_width=args.left_cheek_width,
+                    right_cheek_width=args.right_cheek_width,
+                )
 
             input_latent_list = []
             for bbox, frame in zip(coord_list, frame_list, strict=False):

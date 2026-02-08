@@ -1,5 +1,6 @@
 """MuseTalkProvider の単体テスト (CI互換: GPU不要、MuseTalk import モック)"""
 
+import os
 import sys
 from collections.abc import Generator
 from pathlib import Path
@@ -220,6 +221,37 @@ class TestMuseTalkProviderSysPath:
             assert count == 1
         finally:
             sys.path[:] = original_path
+
+
+class TestMuseTalkProviderChdirMusetalk:
+    """_chdir_musetalk() コンテキストマネージャーのテスト"""
+
+    @pytest.mark.unit
+    def test_chdir_changes_to_model_dir(self, tmp_path: Path) -> None:
+        from app.lipsync.musetalk_provider import MuseTalkProvider
+
+        provider = MuseTalkProvider(model_dir=str(tmp_path))
+        original_cwd = os.getcwd()
+
+        with provider._chdir_musetalk():
+            assert os.getcwd() == str(tmp_path)
+
+        assert os.getcwd() == original_cwd
+
+    @pytest.mark.unit
+    def test_chdir_restores_on_exception(self, tmp_path: Path) -> None:
+        from app.lipsync.musetalk_provider import MuseTalkProvider
+
+        provider = MuseTalkProvider(model_dir=str(tmp_path))
+        original_cwd = os.getcwd()
+
+        with pytest.raises(RuntimeError, match="test error"):
+            with provider._chdir_musetalk():
+                assert os.getcwd() == str(tmp_path)
+                msg = "test error"
+                raise RuntimeError(msg)
+
+        assert os.getcwd() == original_cwd
 
 
 class TestMuseTalkProviderLoadModels:
