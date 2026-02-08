@@ -1,8 +1,9 @@
 # AnotherMe - AI Avatar Platform
 
-| Chat Server | TTS Server |
-|:---:|:---:|
-| [![Chat Server Coverage](https://coverage-badge.samuelcolvin.workers.dev/Rx-K8/AnotherMe.svg?match=chat-server)](https://coverage-badge.samuelcolvin.workers.dev/redirect/Rx-K8/AnotherMe?match=chat-server) | [![TTS Server Coverage](https://coverage-badge.samuelcolvin.workers.dev/Rx-K8/AnotherMe.svg?match=tts-server)](https://coverage-badge.samuelcolvin.workers.dev/redirect/Rx-K8/AnotherMe?match=tts-server) |
+| | Chat Server | TTS Server |
+|:---:|:---:|:---:|
+| **Test** | [![Test Chat Server](https://github.com/Rx-K8/AnotherMe/actions/workflows/test-chat-server.yml/badge.svg)](https://github.com/Rx-K8/AnotherMe/actions/workflows/test-chat-server.yml) | [![Test TTS Server](https://github.com/Rx-K8/AnotherMe/actions/workflows/test-tts-server.yml/badge.svg)](https://github.com/Rx-K8/AnotherMe/actions/workflows/test-tts-server.yml) |
+| **Coverage** | [![Chat Server Coverage](https://coverage-badge.samuelcolvin.workers.dev/Rx-K8/AnotherMe.svg?match=chat-server)](https://coverage-badge.samuelcolvin.workers.dev/redirect/Rx-K8/AnotherMe?match=chat-server) | [![TTS Server Coverage](https://coverage-badge.samuelcolvin.workers.dev/Rx-K8/AnotherMe.svg?match=tts-server)](https://coverage-badge.samuelcolvin.workers.dev/redirect/Rx-K8/AnotherMe?match=tts-server) |
 
 A monorepo containing the full AnotherMe platform: Frontend, Chat Server, and TTS Server.
 
