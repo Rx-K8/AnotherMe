@@ -1,6 +1,3 @@
-from fastapi import APIRouter, Depends
-from fastapi.responses import StreamingResponse
-
 from app.api.utils.sse import stream_as_sse
 from app.core.dependencies import get_chat_service
 from app.schemas.chat import (
@@ -8,6 +5,8 @@ from app.schemas.chat import (
     ChatCompletionResponse,
 )
 from app.services.chat_server import ChatServe
+from fastapi import APIRouter, Depends
+from fastapi.responses import StreamingResponse
 
 router = APIRouter(prefix="/chat", tags=["Chat"])
 

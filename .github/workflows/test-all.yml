@@ -20,7 +20,7 @@ jobs:
         run: uv python install
 
       - name: Setup all projects
-        run: ./scripts/setup.sh
+        run: ./scripts/setup.sh --ci
 
       - name: Run test-all
-        run: ./scripts/test-all.sh
+        run: ./scripts/test-all.sh --ci
