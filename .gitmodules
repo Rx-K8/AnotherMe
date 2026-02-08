@@ -1,0 +1,3 @@
+[submodule "lipsync-server/submodules/MuseTalk"]
+	path = lipsync-server/submodules/MuseTalk
+	url = https://github.com/TMElyralab/MuseTalk.git
