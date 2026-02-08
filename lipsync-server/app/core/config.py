@@ -21,7 +21,7 @@ class Settings(BaseSettings):
     gpu_device: str = "cuda:2"
     max_audio_size_mb: int = 10
     max_video_size_mb: int = 50
-    lipsync_provider: str = "musetalk"
+    provider_name: str = "musetalk"
     use_float16: bool = True
     batch_size: int = 8
 

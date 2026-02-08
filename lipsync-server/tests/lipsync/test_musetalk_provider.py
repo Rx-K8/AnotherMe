@@ -410,12 +410,12 @@ class TestMuseTalkProviderConfig:
     """config.py に追加された設定値のテスト"""
 
     @pytest.mark.unit
-    def test_settings_has_lipsync_provider(self) -> None:
+    def test_settings_has_provider_name(self) -> None:
         from app.core.config import Settings
 
         s = Settings()
-        assert hasattr(s, "lipsync_provider")
-        assert s.lipsync_provider == "musetalk"
+        assert hasattr(s, "provider_name")
+        assert s.provider_name == "musetalk"
 
     @pytest.mark.unit
     def test_settings_has_use_float16(self) -> None:
