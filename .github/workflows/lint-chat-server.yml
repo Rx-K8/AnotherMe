@@ -42,7 +42,7 @@ jobs:
 
       - name: Install dependencies
         working-directory: chat-server
-        run: uv sync --group dev
+        run: uv sync --group dev --index pytorch-cu128=https://download.pytorch.org/whl/cpu
 
       - name: Run lint
         working-directory: chat-server
