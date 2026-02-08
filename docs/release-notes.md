@@ -17,6 +17,10 @@
 * docs: READMEにテストバッジを追加. PR [#15](https://github.com/Rx-K8/AnotherMe/pull/15) by [@Rx-K8](https://github.com/Rx-K8).
 * docs: カバレッジバッジにサーバー名ラベルを追加. PR [#12](https://github.com/Rx-K8/AnotherMe/pull/12) by [@Rx-K8](https://github.com/Rx-K8).
 
+### Chores
+
+* chore: デフォルトでCUDA版PyTorchをインストール. PR [#17](https://github.com/Rx-K8/AnotherMe/pull/17) by [@Rx-K8](https://github.com/Rx-K8).
+
 ### Internal
 
 * chore: pre-commit hookで代替される冗長スクリプトを削除. PR [#14](https://github.com/Rx-K8/AnotherMe/pull/14) by [@Rx-K8](https://github.com/Rx-K8).
