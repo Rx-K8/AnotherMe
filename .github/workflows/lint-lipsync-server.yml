@@ -44,7 +44,7 @@ jobs:
 
       - name: Install dependencies
         working-directory: lipsync-server
-        run: uv sync --group dev --index pytorch-cu118=https://download.pytorch.org/whl/cpu
+        run: uv sync --group dev --index pytorch-cu118=https://download.pytorch.org/whl/cpu --index-strategy unsafe-best-match
 
       - name: Run lint
         working-directory: lipsync-server
