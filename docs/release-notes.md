@@ -15,6 +15,7 @@
 
 ### Docs
 
+* docs: READMEにlipsync-serverのバッジを追加. PR [#21](https://github.com/Rx-K8/AnotherMe/pull/21) by [@Rx-K8](https://github.com/Rx-K8).
 * docs: READMEにテストバッジを追加. PR [#15](https://github.com/Rx-K8/AnotherMe/pull/15) by [@Rx-K8](https://github.com/Rx-K8).
 * docs: カバレッジバッジにサーバー名ラベルを追加. PR [#12](https://github.com/Rx-K8/AnotherMe/pull/12) by [@Rx-K8](https://github.com/Rx-K8).
 
