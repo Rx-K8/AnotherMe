@@ -8,7 +8,7 @@ import io
 import os
 import tempfile
 
-import soundfile as sf  # type: ignore[import-untyped]
+import soundfile as sf
 import torch
 from qwen_tts import Qwen3TTSModel
 

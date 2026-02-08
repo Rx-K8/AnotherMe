@@ -1,0 +1,64 @@
+name: Test Lipsync Server
+
+on:
+  push:
+    branches:
+      - develop
+      - main
+    paths:
+      - "lipsync-server/**/*.py"
+      - "lipsync-server/pyproject.toml"
+      - "lipsync-server/uv.lock"
+      - "pyproject.toml"
+      - "scripts/test-all.sh"
+      - ".github/workflows/test-lipsync-server.yml"
+  pull_request:
+    types:
+      - opened
+      - synchronize
+    paths:
+      - "lipsync-server/**/*.py"
+      - "lipsync-server/pyproject.toml"
+      - "lipsync-server/uv.lock"
+      - "pyproject.toml"
+      - "scripts/test-all.sh"
+      - ".github/workflows/test-lipsync-server.yml"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          submodules: false
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+
+      - name: Set up Python
+        working-directory: lipsync-server
+        run: uv python install
+
+      - name: Install dependencies
+        working-directory: lipsync-server
+        run: uv sync --group dev --index pytorch-cu118=https://download.pytorch.org/whl/cpu --index-strategy unsafe-best-match
+
+      - name: Run tests
+        working-directory: lipsync-server
+        env:
+          SERVER_HOST: "0.0.0.0"
+          SERVER_PORT: "8002"
+          CORS_ORIGINS: '["*"]'
+        run: uv run pytest tests/ -v --tb=short -m "not gpu" --cov --cov-report=term-missing --cov-report=html
+
+      - name: Store coverage files
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-html
+          path: lipsync-server/htmlcov
+          include-hidden-files: true
+
+      - name: Coverage report
+        working-directory: lipsync-server
+        run: uv run coverage report
