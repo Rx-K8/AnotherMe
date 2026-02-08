@@ -13,6 +13,7 @@
 
 ### Internal
 
+* ci: カバレッジバッジをSmokeshow連携のcoverage-badgeに移行. PR [#10](https://github.com/Rx-K8/AnotherMe/pull/10) by [@Rx-K8](https://github.com/Rx-K8).
 * ci: 重複するlint-all/test-allワークフローを削除. PR [#9](https://github.com/Rx-K8/AnotherMe/pull/9) by [@Rx-K8](https://github.com/Rx-K8).
 * ci: PyTorchのCPU/GPU版をextrasで切り替え可能にする. PR [#8](https://github.com/Rx-K8/AnotherMe/pull/8) by [@Rx-K8](https://github.com/Rx-K8).
 * ci: TTS Serverのカバレッジバッジを追加. PR [#7](https://github.com/Rx-K8/AnotherMe/pull/7) by [@Rx-K8](https://github.com/Rx-K8).
