@@ -1,0 +1,51 @@
+name: Lint Lipsync Server
+
+on:
+  push:
+    branches:
+      - develop
+      - main
+    paths:
+      - "lipsync-server/**/*.py"
+      - "lipsync-server/pyproject.toml"
+      - "lipsync-server/uv.lock"
+      - "pyproject.toml"
+      - "scripts/lint-all.sh"
+      - ".pre-commit-config.yaml"
+      - ".github/workflows/lint-lipsync-server.yml"
+  pull_request:
+    types:
+      - opened
+      - synchronize
+    paths:
+      - "lipsync-server/**/*.py"
+      - "lipsync-server/pyproject.toml"
+      - "lipsync-server/uv.lock"
+      - "pyproject.toml"
+      - "scripts/lint-all.sh"
+      - ".pre-commit-config.yaml"
+      - ".github/workflows/lint-lipsync-server.yml"
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          submodules: false
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+
+      - name: Set up Python
+        working-directory: lipsync-server
+        run: uv python install
+
+      - name: Install dependencies
+        working-directory: lipsync-server
+        run: uv sync --group dev --index pytorch-cu118=https://download.pytorch.org/whl/cpu
+
+      - name: Run lint
+        working-directory: lipsync-server
+        run: uv run bash scripts/lint.sh

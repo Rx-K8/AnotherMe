@@ -23,4 +23,4 @@ class Settings(BaseSettings):
     max_video_size_mb: int = 50
 
 
-settings = Settings()  # type: ignore[call-arg]
+settings = Settings()
