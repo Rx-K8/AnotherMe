@@ -13,5 +13,6 @@
 
 ### Internal
 
+* ci: TTS Serverのカバレッジバッジを追加. PR [#7](https://github.com/Rx-K8/AnotherMe/pull/7) by [@Rx-K8](https://github.com/Rx-K8).
 * chore: .gitignoreに.claudeディレクトリを追加. PR [#6](https://github.com/Rx-K8/AnotherMe/pull/6) by [@Rx-K8](https://github.com/Rx-K8).
 * feat: choreラベルを追加. PR [#2](https://github.com/Rx-K8/AnotherMe/pull/2) by [@Rx-K8](https://github.com/Rx-K8).
