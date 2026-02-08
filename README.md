@@ -1,7 +1,8 @@
 # AnotherMe - AI Avatar Platform
 
-[![Chat Server Coverage](https://coverage-badge.samuelcolvin.workers.dev/Rx-K8/AnotherMe.svg?match=chat-server)](https://coverage-badge.samuelcolvin.workers.dev/redirect/Rx-K8/AnotherMe?match=chat-server)
-[![TTS Server Coverage](https://coverage-badge.samuelcolvin.workers.dev/Rx-K8/AnotherMe.svg?match=tts-server)](https://coverage-badge.samuelcolvin.workers.dev/redirect/Rx-K8/AnotherMe?match=tts-server)
+| Chat Server | TTS Server |
+|:---:|:---:|
+| [![Chat Server Coverage](https://coverage-badge.samuelcolvin.workers.dev/Rx-K8/AnotherMe.svg?match=chat-server)](https://coverage-badge.samuelcolvin.workers.dev/redirect/Rx-K8/AnotherMe?match=chat-server) | [![TTS Server Coverage](https://coverage-badge.samuelcolvin.workers.dev/Rx-K8/AnotherMe.svg?match=tts-server)](https://coverage-badge.samuelcolvin.workers.dev/redirect/Rx-K8/AnotherMe?match=tts-server) |
 
 A monorepo containing the full AnotherMe platform: Frontend, Chat Server, and TTS Server.
 
