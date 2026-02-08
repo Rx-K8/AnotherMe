@@ -4,6 +4,7 @@
 
 ### Features
 
+* feat: lipsync-server Service層 + MockProvider + Factory. PR [#24](https://github.com/Rx-K8/AnotherMe/pull/24) by [@Rx-K8](https://github.com/Rx-K8).
 * feat: lipsync-serverバリデーター（audio/media）追加. PR [#22](https://github.com/Rx-K8/AnotherMe/pull/22) by [@Rx-K8](https://github.com/Rx-K8).
 * feat: lipsync-serverのプロジェクト骨格とインターフェース定義. PR [#19](https://github.com/Rx-K8/AnotherMe/pull/19) by [@Rx-K8](https://github.com/Rx-K8).
 * feat: .envでURI・CORS設定を必須化. PR [#16](https://github.com/Rx-K8/AnotherMe/pull/16) by [@Rx-K8](https://github.com/Rx-K8).
