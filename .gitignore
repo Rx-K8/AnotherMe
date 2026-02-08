@@ -133,3 +133,6 @@ nohup.out
 # uv.lock
 # package-lock.json
 # package.json
+
+# Claude Code
+.claude
