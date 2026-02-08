@@ -44,6 +44,10 @@ jobs:
 
       - name: Run tests
         working-directory: tts-server
+        env:
+          SERVER_HOST: "0.0.0.0"
+          SERVER_PORT: "8001"
+          CORS_ORIGINS: '["*"]'
         run: uv run --extra cpu pytest tests/ -v --tb=short --cov --cov-report=term-missing --cov-report=html
 
       - name: Store coverage files

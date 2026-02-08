@@ -34,7 +34,7 @@ class TestInitializeLlmProvider:
             deps._llm_provider = None
             with patch.dict(
                 "os.environ",
-                {"APP_NAME": "test", "LLM_MODEL_NAME": "mock"},
+                {"APP_NAME": "test", "LLM_MODEL_NAME": "mock", "SERVER_HOST": "0.0.0.0", "SERVER_PORT": "8000", "CORS_ORIGINS": '["*"]'},
                 clear=False,
             ):
                 from app.core.config import get_settings

@@ -13,6 +13,9 @@ class Settings(BaseSettings):
 
     app_name: str
     llm_model_name: str
+    server_host: str
+    server_port: int
+    cors_origins: list[str]
 
 
 @lru_cache
