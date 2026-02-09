@@ -55,6 +55,7 @@ export const createChatCompletion = async (
         {
           index: 0,
           message: {
+            id: "mock-message-id",
             role: "assistant",
             content: `これはモックレスポンスです。${request.messages[request.messages.length - 1].content}`,
           },
