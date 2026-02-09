@@ -29,6 +29,7 @@
 
 ### Internal
 
+* feat: lipsync-server Dockerfile + .dockerignore. PR [#27](https://github.com/Rx-K8/AnotherMe/pull/27) by [@Rx-K8](https://github.com/Rx-K8).
 * ci: lipsync-serverをpre-commit対象に追加. PR [#23](https://github.com/Rx-K8/AnotherMe/pull/23) by [@Rx-K8](https://github.com/Rx-K8).
 * chore: pre-commit hookで代替される冗長スクリプトを削除. PR [#14](https://github.com/Rx-K8/AnotherMe/pull/14) by [@Rx-K8](https://github.com/Rx-K8).
 * test: chat-serverにpytestテスト基盤を追加. PR [#11](https://github.com/Rx-K8/AnotherMe/pull/11) by [@Rx-K8](https://github.com/Rx-K8).
