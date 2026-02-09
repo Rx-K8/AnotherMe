@@ -18,19 +18,15 @@ uv sync --group dev
 ### OpenMMLab のインストール（必須・GPU 環境のみ）
 
 MuseTalk の顔ランドマーク検出に mmpose が必要。
-mmcv / mmdet / mmpose は pip wheel の互換性の問題から `pyproject.toml` に含めておらず、`mim install` で別途インストールする。
+mmcv / mmdet / mmpose は CUDA 固有のビルドが必要で `pyproject.toml` に含めていないため、`mim install` で別途インストールする。
 
 ```bash
-# setuptools を固定（v82+ は pkg_resources を削除しており mmcv が動作しない）
-uv pip install "setuptools<70"
-
-# OpenMMLab のインストール
-uv pip install openmim
-uv run mim install mmengine mmcv==2.0.1 mmdet==3.1.0 mmpose==1.1.0
+# OpenMMLab のインストール（.venv/bin/ を使用）
+.venv/bin/mim install mmengine mmcv==2.0.1 mmdet==3.1.0 mmpose==1.1.0
 ```
 
-> **注意**: `uv sync` や `uv run` を実行すると、lockfile に存在しないパッケージ（mmcv 等）が削除される場合がある。
-> GPU テストの実行時は `.venv/bin/pytest` を直接使用すること（後述）。
+> **重要**: `uv sync` や `uv run` を実行すると、lockfile に存在しないパッケージ（mmcv 等）が自動削除される。
+> サーバー起動・GPU テストには `.venv/bin/` を直接使用すること（後述）。
 
 ### chumpy のインストール（mmpose の依存）
 
@@ -54,14 +50,15 @@ git submodule update --init lipsync-server/submodules/MuseTalk
 モデルの重みは別途ダウンロードし、`submodules/MuseTalk/models/` に配置する。
 
 ```bash
-cd submodules/MuseTalk
 bash download_weights.sh
 ```
 
 ## サーバーの起動
 
+`uv run` は lockfile 同期で mmcv 等を削除するため、`.venv/bin/uvicorn` を直接使用する。
+
 ```bash
-uv run uvicorn app.main:app --host 0.0.0.0 --port 8002
+.venv/bin/uvicorn app.main:app --host 0.0.0.0 --port 8002
 ```
 
 ### デモ UI の有効化
@@ -69,7 +66,7 @@ uv run uvicorn app.main:app --host 0.0.0.0 --port 8002
 環境変数 `ENABLE_DEMO=true` を設定すると `/demo` にテスト用 UI が表示される。
 
 ```bash
-ENABLE_DEMO=true uv run uvicorn app.main:app --host 0.0.0.0 --port 8002
+ENABLE_DEMO=true .venv/bin/uvicorn app.main:app --host 0.0.0.0 --port 8002
 ```
 
 ## Docker イメージのビルドと起動

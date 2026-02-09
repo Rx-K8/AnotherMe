@@ -146,7 +146,9 @@ class MuseTalkProvider(LipsyncProvider):
         self._setup_sys_path()
 
         # MuseTalk モジュールは pyproject.toml に含まれず、
-        # sys.path 追加 + CWD 変更が前提のため動的 import が必須
+        # sys.path 追加 + CWD 変更が前提のため動的 import が必須。
+        # load_all_model() 内部で os.path.join("models", vae_type) と
+        # 相対パスがハードコードされているため、CWD を維持する。
         with self._chdir_musetalk():
             from musetalk.utils.audio_processor import AudioProcessor
             from musetalk.utils.blending import get_image
@@ -164,6 +166,10 @@ class MuseTalkProvider(LipsyncProvider):
                 load_all_model,
             )
 
+            device = torch.device(self._device)
+
+            vae, unet, pe = load_all_model(device=device)
+
         # ユーティリティ関数を保持
         self._get_file_type = get_file_type
         self._get_video_fps = get_video_fps
@@ -174,16 +180,6 @@ class MuseTalkProvider(LipsyncProvider):
         self._get_bbox_range = get_bbox_range
         self._get_image = get_image
         self._FaceParsing = FaceParsing
-
-        device = torch.device(self._device)
-        models_dir = str(self._model_dir / "models")
-
-        vae, unet, pe = load_all_model(
-            unet_model_path=os.path.join(models_dir, "musetalkV15", "unet.pth"),
-            vae_type="sd-vae",
-            unet_config=os.path.join(models_dir, "musetalkV15", "musetalk.json"),
-            device=device,
-        )
 
         if self._use_float16:
             pe = pe.half()
@@ -202,6 +198,7 @@ class MuseTalkProvider(LipsyncProvider):
         self._pe = pe
         self._timesteps = torch.tensor([0], device=device)
 
+        models_dir = str(self._model_dir / "models")
         whisper_path = os.path.join(models_dir, "whisper")
         self._audio_processor = AudioProcessor(feature_extractor_path=whisper_path)
         whisper = WhisperModel.from_pretrained(whisper_path)
@@ -295,9 +292,15 @@ class MuseTalkProvider(LipsyncProvider):
             )
 
             # --- 前処理 ---
-            coord_list, frame_list = self._get_landmark_and_bbox(
-                input_img_list, bbox_shift
-            )
+            try:
+                coord_list, frame_list = self._get_landmark_and_bbox(
+                    input_img_list, bbox_shift
+                )
+            except ZeroDivisionError:
+                raise ValueError(
+                    "入力画像/動画から顔を検出できませんでした。"
+                    "顔が明瞭に写っているファイルを使用してください。"
+                ) from None
 
             # FaceParsing.model_init() が ./models/face-parse-bisent/ を参照するため
             # CWD を MuseTalk ルートに変更する
