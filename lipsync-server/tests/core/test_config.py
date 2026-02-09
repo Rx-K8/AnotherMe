@@ -8,4 +8,4 @@ class TestSettings:
     @pytest.mark.unit
     def test_default_provider_name(self) -> None:
         s = Settings()
-        assert s.provider_name == "mock"
+        assert s.provider_name == "musetalk"

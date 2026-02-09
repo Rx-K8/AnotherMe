@@ -8,7 +8,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api.main import api_router
+from app.api.main import api_router, demo_router
 from app.core.config import settings
 from app.lipsync.factory import create_provider
 from app.services.lipsync_service import LipsyncService
@@ -27,6 +27,7 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     """アプリケーション起動時の初期化処理"""
     logger.info("リップシンクプロバイダーの初期化を開始します...")
     provider = create_provider(settings.provider_name)
+    provider.load_models()
     app.state.lipsync_service = LipsyncService(provider=provider)
     logger.info(
         "リップシンクプロバイダー(%s)の初期化が完了しました",
@@ -44,6 +45,9 @@ def create_app() -> FastAPI:
         lifespan=lifespan,
     )
     app.include_router(api_router)
+
+    if demo_router is not None:
+        app.include_router(demo_router)
 
     app.add_middleware(
         CORSMiddleware,
