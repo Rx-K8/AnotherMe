@@ -4,6 +4,7 @@
 
 ### Features
 
+* feat: MuseTalkProvider実装 + GPU推論基盤. PR [#26](https://github.com/Rx-K8/AnotherMe/pull/26) by [@Rx-K8](https://github.com/Rx-K8).
 * feat: lipsync-server APIルーター + main.py. PR [#25](https://github.com/Rx-K8/AnotherMe/pull/25) by [@Rx-K8](https://github.com/Rx-K8).
 * feat: lipsync-server Service層 + MockProvider + Factory. PR [#24](https://github.com/Rx-K8/AnotherMe/pull/24) by [@Rx-K8](https://github.com/Rx-K8).
 * feat: lipsync-serverバリデーター（audio/media）追加. PR [#22](https://github.com/Rx-K8/AnotherMe/pull/22) by [@Rx-K8](https://github.com/Rx-K8).
