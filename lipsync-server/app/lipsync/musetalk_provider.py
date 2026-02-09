@@ -9,6 +9,8 @@ generate() から run_in_executor で呼び出す。
 from __future__ import annotations
 
 import asyncio
+import copy
+import glob
 import logging
 import os
 import re
@@ -19,6 +21,12 @@ from collections.abc import Iterator
 from contextlib import contextmanager
 from pathlib import Path
 from typing import Any
+
+import cv2
+import imageio
+import numpy as np
+import torch
+from transformers import WhisperModel
 
 from app.lipsync.abc import LipsyncProvider, LipsyncResult
 
@@ -93,6 +101,24 @@ class MuseTalkProvider(LipsyncProvider):
         finally:
             os.chdir(prev_cwd)
 
+    # load_models() でチェックする必須モデルファイル（models/ からの相対パス）
+    _REQUIRED_MODEL_FILES: tuple[str, ...] = (
+        "musetalkV15/unet.pth",
+        "musetalkV15/musetalk.json",
+        "sd-vae/config.json",
+        "sd-vae/diffusion_pytorch_model.bin",
+        "whisper/config.json",
+        "whisper/pytorch_model.bin",
+        "dwpose/dw-ll_ucoco_384.pth",
+        "face-parse-bisent/79999_iter.pth",
+        "face-parse-bisent/resnet18-5c106cde.pth",
+    )
+
+    def _check_model_files(self) -> list[str]:
+        """不足しているモデルファイルの相対パスリストを返す"""
+        models_dir = self._model_dir / "models"
+        return [f for f in self._REQUIRED_MODEL_FILES if not (models_dir / f).exists()]
+
     def load_models(self) -> None:
         """全モデルをロードする（同期メソッド）
 
@@ -100,14 +126,27 @@ class MuseTalkProvider(LipsyncProvider):
         CI 環境でもクラスの import 自体は成功する。
         preprocessing.py がモジュールレベルで相対パスを使って
         init_model() を呼ぶため、CWD を MuseTalk ルートに変更する。
+
+        Raises:
+            FileNotFoundError: 必須モデルファイルが不足している場合
         """
         if self._loaded:
             return
 
+        missing = self._check_model_files()
+        if missing:
+            msg = (
+                "以下のモデルファイルが見つかりません:\n"
+                + "\n".join(f"  - {f}" for f in missing)
+                + "\n\nダウンロードスクリプトを実行してください:\n"
+                "  cd lipsync-server && bash download_weights.sh"
+            )
+            raise FileNotFoundError(msg)
+
         self._setup_sys_path()
 
-        import torch
-
+        # MuseTalk モジュールは pyproject.toml に含まれず、
+        # sys.path 追加 + CWD 変更が前提のため動的 import が必須
         with self._chdir_musetalk():
             from musetalk.utils.audio_processor import AudioProcessor
             from musetalk.utils.blending import get_image
@@ -124,8 +163,6 @@ class MuseTalkProvider(LipsyncProvider):
                 get_video_fps,
                 load_all_model,
             )
-
-        from transformers import WhisperModel
 
         # ユーティリティ関数を保持
         self._get_file_type = get_file_type
@@ -188,13 +225,7 @@ class MuseTalkProvider(LipsyncProvider):
         Returns:
             (動画バイト列, 秒数) のタプル
         """
-        import copy
-        import glob
-
-        import cv2
-        import imageio
-        import numpy as np
-        import torch
+        # moviepy.editor は ffmpeg 依存の重い初期化を含むため関数内 import
         from moviepy.editor import AudioFileClip, VideoFileClip
 
         device = torch.device(self._device)
@@ -393,8 +424,6 @@ class MuseTalkProvider(LipsyncProvider):
         parsing_mode: str,
     ) -> LipsyncResult:
         """同期推論（run_in_executor から呼ばれる）"""
-        import torch
-
         with torch.no_grad():
             video_bytes, duration = self._run_pipeline(
                 audio_path, video_path, bbox_shift, extra_margin, parsing_mode

@@ -27,6 +27,7 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     """アプリケーション起動時の初期化処理"""
     logger.info("リップシンクプロバイダーの初期化を開始します...")
     provider = create_provider(settings.provider_name)
+    provider.load_models()
     app.state.lipsync_service = LipsyncService(provider=provider)
     logger.info(
         "リップシンクプロバイダー(%s)の初期化が完了しました",

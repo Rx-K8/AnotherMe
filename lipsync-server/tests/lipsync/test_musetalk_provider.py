@@ -11,9 +11,11 @@ from unittest.mock import MagicMock, patch
 import pytest
 from app.lipsync.abc import LipsyncProvider, LipsyncResult
 
+_MODULE = "app.lipsync.musetalk_provider"
+
 
 # ---------------------------------------------------------------------------
-# MuseTalk モジュールのスタブ群（CI環境にtorch/MuseTalkが無い場合に備える）
+# MuseTalk モジュールのスタブ群（CI環境にMuseTalkが無い場合に備える）
 # ---------------------------------------------------------------------------
 def _build_musetalk_stubs() -> dict[str, ModuleType]:
     """musetalk.* 名前空間のスタブモジュールを生成する"""
@@ -62,30 +64,30 @@ def _build_musetalk_stubs() -> dict[str, ModuleType]:
     return stubs
 
 
-# ---------------------------------------------------------------------------
-# torch スタブ（CI環境に torch が無い場合）
-# ---------------------------------------------------------------------------
-def _build_torch_stub() -> ModuleType:
-    """最低限の torch スタブを生成する"""
-    torch_mod = ModuleType("torch")
-    torch_mod.device = MagicMock  # type: ignore[attr-defined]
-    torch_mod.float16 = "float16"  # type: ignore[attr-defined]
-    torch_mod.float32 = "float32"  # type: ignore[attr-defined]
+def _build_torch_mock() -> MagicMock:
+    """load_models() 用の torch モックを生成する
+
+    CI 環境に CUDA が無いため、torch.device / torch.tensor 等を
+    MagicMock で差し替える。
+    """
+    mock_torch = MagicMock()
+    mock_torch.device = MagicMock
+    mock_torch.float16 = "float16"
+    mock_torch.float32 = "float32"
     ctx = MagicMock(__enter__=MagicMock(), __exit__=MagicMock())
-    torch_mod.no_grad = MagicMock(return_value=ctx)  # type: ignore[attr-defined]
-    torch_mod.tensor = MagicMock()  # type: ignore[attr-defined]
-    torch_mod.cuda = MagicMock()  # type: ignore[attr-defined]
-    torch_mod.cuda.is_available = MagicMock(return_value=False)
-    return torch_mod
+    mock_torch.no_grad = MagicMock(return_value=ctx)
+    mock_torch.tensor = MagicMock()
+    return mock_torch
 
 
-def _build_transformers_stub() -> ModuleType:
-    """最低限の transformers スタブを生成する"""
-    transformers_mod = ModuleType("transformers")
-    mock_whisper = MagicMock()
-    mock_whisper.from_pretrained = MagicMock(return_value=MagicMock())
-    transformers_mod.WhisperModel = mock_whisper  # type: ignore[attr-defined]
-    return transformers_mod
+def _build_whisper_mock() -> MagicMock:
+    """load_models() 用の WhisperModel モックを生成する
+
+    CI 環境にモデルファイルが無いため、from_pretrained をモックする。
+    """
+    mock_cls = MagicMock()
+    mock_cls.from_pretrained.return_value = MagicMock()
+    return mock_cls
 
 
 # ---------------------------------------------------------------------------
@@ -99,26 +101,31 @@ def musetalk_stubs() -> dict[str, ModuleType]:
 @pytest.fixture()
 def _patch_musetalk_imports(
     musetalk_stubs: dict[str, ModuleType],
+    tmp_path: Path,
 ) -> Generator[None, None, None]:
-    """sys.modules に MuseTalk スタブを注入し、テスト後に復元する"""
-    torch_stub = _build_torch_stub()
-    transformers_stub = _build_transformers_stub()
+    """MuseTalk スタブ + torch/WhisperModel モックを注入する
 
-    all_stubs: dict[str, Any] = {
-        **musetalk_stubs,
-        "torch": torch_stub,
-        "torch.cuda": MagicMock(),
-        "transformers": transformers_stub,
-    }
-
+    musetalk.* — sys.modules に直接注入（パッケージが存在しないため）
+    torch, WhisperModel — モジュールレベル参照を patch で差し替え
+    """
+    # musetalk スタブを sys.modules に注入
     originals: dict[str, Any] = {}
-    for name, mod in all_stubs.items():
+    for name, mod in musetalk_stubs.items():
         originals[name] = sys.modules.get(name)
         sys.modules[name] = mod
 
-    yield
+    mock_torch = _build_torch_mock()
+    mock_whisper = _build_whisper_mock()
 
-    for name in all_stubs:
+    with (
+        patch(f"{_MODULE}.torch", mock_torch),
+        patch(f"{_MODULE}.WhisperModel", mock_whisper),
+        patch(f"{_MODULE}._DEFAULT_MODEL_DIR", tmp_path),
+        patch(f"{_MODULE}.MuseTalkProvider._check_model_files", return_value=[]),
+    ):
+        yield
+
+    for name in musetalk_stubs:
         if originals[name] is None:
             sys.modules.pop(name, None)
         else:
@@ -464,6 +471,42 @@ class TestMuseTalkProviderConfig:
         s = Settings()
         assert hasattr(s, "batch_size")
         assert s.batch_size == 8
+
+
+# ---------------------------------------------------------------------------
+# モデルファイル存在チェック
+# ---------------------------------------------------------------------------
+class TestMuseTalkProviderModelCheck:
+    """_check_model_files / load_models のモデル存在チェックテスト"""
+
+    @pytest.mark.unit
+    def test_check_model_files_all_missing(self, tmp_path: Path) -> None:
+        from app.lipsync.musetalk_provider import MuseTalkProvider
+
+        provider = MuseTalkProvider(model_dir=str(tmp_path))
+        missing = provider._check_model_files()
+        assert len(missing) == len(MuseTalkProvider._REQUIRED_MODEL_FILES)
+
+    @pytest.mark.unit
+    def test_check_model_files_all_present(self, tmp_path: Path) -> None:
+        from app.lipsync.musetalk_provider import MuseTalkProvider
+
+        models_dir = tmp_path / "models"
+        for f in MuseTalkProvider._REQUIRED_MODEL_FILES:
+            path = models_dir / f
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_bytes(b"dummy")
+
+        provider = MuseTalkProvider(model_dir=str(tmp_path))
+        assert provider._check_model_files() == []
+
+    @pytest.mark.unit
+    def test_load_models_raises_when_files_missing(self, tmp_path: Path) -> None:
+        from app.lipsync.musetalk_provider import MuseTalkProvider
+
+        provider = MuseTalkProvider(model_dir=str(tmp_path))
+        with pytest.raises(FileNotFoundError, match="download_weights.sh"):
+            provider.load_models()
 
 
 # ---------------------------------------------------------------------------

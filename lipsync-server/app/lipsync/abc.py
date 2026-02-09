@@ -19,6 +19,13 @@ class LipsyncProvider(ABC):
     このクラスを継承して実装する。
     """
 
+    def load_models(self) -> None:  # noqa: B027
+        """モデルをロードする
+
+        GPU プロバイダーはオーバーライドして重み読み込みを行う。
+        デフォルトは no-op（MockProvider 等はロード不要）。
+        """
+
     @abstractmethod
     async def generate(
         self,
