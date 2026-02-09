@@ -31,6 +31,9 @@ dependencies = [
     "torchvision==0.15.2",
     "transformers==4.39.2",
     "xtcocotools>=1.14.3",
+    # setuptools<70: mmpose/mmengine が pkg_resources を使用するが
+    # setuptools v82+ で削除されたため、pkg_resources を含むバージョンを固定
+    "setuptools<70",
     # --- Server dependencies ---
     "fastapi[standard]>=0.115.0",
     "pydantic-settings>=2.12.0",
