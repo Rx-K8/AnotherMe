@@ -22,7 +22,7 @@ export const generateLipsync = async (
 ): Promise<LipsyncResponse> => {
   const API_BASE_URL = import.meta.env.VITE_LIPSYNC_API_BASE_URL
   const formData = new FormData()
-  formData.append("audio_file", request.audio)
+  formData.append("audio_file", request.audio, "audio.wav")
   formData.append("video_file", request.video)
   formData.append("bbox_shift", (request.bbox_shift ?? 0).toString())
   formData.append("extra_margin", (request.extra_margin ?? 10).toString())
