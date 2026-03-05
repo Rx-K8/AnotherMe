@@ -1,0 +1,32 @@
+name: Coverage Report (Chat Server)
+
+on:
+  workflow_run:
+    workflows: [Test Chat Server]
+    types: [completed]
+
+jobs:
+  smokeshow:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    permissions:
+      statuses: write
+    steps:
+      - uses: actions/checkout@v5
+
+      - run: pip install smokeshow
+
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          run-id: ${{ github.event.workflow_run.id }}
+
+      - name: Upload to Smokeshow
+        run: smokeshow upload coverage-html
+        env:
+          SMOKESHOW_GITHUB_STATUS_DESCRIPTION: coverage chat-server {coverage-percentage}
+          SMOKESHOW_GITHUB_COVERAGE_THRESHOLD: 50
+          SMOKESHOW_GITHUB_CONTEXT: chat-server
+          SMOKESHOW_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SMOKESHOW_GITHUB_PR_HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+          SMOKESHOW_AUTH_KEY: ${{ secrets.SMOKESHOW_AUTH_KEY }}

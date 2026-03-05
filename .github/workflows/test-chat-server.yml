@@ -1,0 +1,62 @@
+name: Test Chat Server
+
+on:
+  push:
+    branches:
+      - develop
+      - main
+    paths:
+      - "chat-server/**/*.py"
+      - "chat-server/pyproject.toml"
+      - "chat-server/uv.lock"
+      - "pyproject.toml"
+      - "scripts/test-all.sh"
+      - ".github/workflows/test-chat-server.yml"
+  pull_request:
+    types:
+      - opened
+      - synchronize
+    paths:
+      - "chat-server/**/*.py"
+      - "chat-server/pyproject.toml"
+      - "chat-server/uv.lock"
+      - "pyproject.toml"
+      - "scripts/test-all.sh"
+      - ".github/workflows/test-chat-server.yml"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+
+      - name: Set up Python
+        working-directory: chat-server
+        run: uv python install
+
+      - name: Install dependencies
+        working-directory: chat-server
+        run: uv sync --group dev --index pytorch-cu128=https://download.pytorch.org/whl/cpu
+
+      - name: Run tests
+        working-directory: chat-server
+        env:
+          SERVER_HOST: "0.0.0.0"
+          SERVER_PORT: "8000"
+          CORS_ORIGINS: '["*"]'
+        run: uv run pytest tests/ -v --tb=short -m "not gpu" --cov --cov-report=term-missing --cov-report=html
+
+      - name: Store coverage files
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-html
+          path: chat-server/htmlcov
+          include-hidden-files: true
+
+      - name: Coverage report
+        working-directory: chat-server
+        run: uv run coverage report

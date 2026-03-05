@@ -1,0 +1,24 @@
+# タイプラベル（ファイルパスベース）
+# 注: breaking、security、feature、bug、refactor、upgradeラベルは
+# コミットメッセージの内容に基づくため、手動で付与してください
+
+docs:
+  - changed-files:
+    - any-glob-to-any-file:
+      - '**/README.md'
+      - '**/CHANGELOG.md'
+      - 'docs/**'
+      - '**/*.md'
+
+internal:
+  - changed-files:
+    - any-glob-to-any-file:
+      - '.github/**'
+      - '.vscode/**'
+      - 'scripts/**'
+      - '.gitignore'
+      - '.pre-commit-config.yaml'
+      - 'pyproject.toml'
+      - '**/pyproject.toml'
+      - 'uv.lock'
+      - '**/uv.lock'

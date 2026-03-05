@@ -71,14 +71,14 @@ class MockLLMProvider(LLMProvider):
         self,
         messages: list[Message],
         temperature: float | None = None,
-        max_tokens: int | None = None,
+        max_new_tokens: int | None = None,
     ) -> LLMResponse:
         """アレンジしたモックレスポンスを生成する。
 
         Args:
             messages: 会話履歴のメッセージリスト
             temperature: 生成の温度パラメータ（無視される）
-            max_tokens: 生成する最大トークン数（無視される）
+            max_new_tokens: 生成する最大トークン数（無視される）
 
         Returns:
             LLMResponse: モックレスポンス
@@ -101,20 +101,20 @@ class MockLLMProvider(LLMProvider):
         self,
         messages: list[Message],
         temperature: float | None = None,
-        max_tokens: int | None = None,
+        max_new_tokens: int | None = None,
     ) -> AsyncGenerator[LLMStreamChunk]:
         """ストリーミング形式でモックレスポンスを生成する。
 
         Args:
             messages: 会話履歴のメッセージリスト
             temperature: 生成の温度パラメータ（無視される）
-            max_tokens: 生成する最大トークン数（無視される）
+            max_new_tokens: 生成する最大トークン数（無視される）
 
         Yields:
             LLMStreamChunk: ストリーミング応答のチャンク
         """
         # 非ストリーミングと同じレスポンスを生成
-        response = await self.generate(messages, temperature, max_tokens)
+        response = await self.generate(messages, temperature, max_new_tokens)
         content = response.content
 
         # 文字単位でストリーミング

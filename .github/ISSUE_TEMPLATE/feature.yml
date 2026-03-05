@@ -1,0 +1,70 @@
+name: 機能リクエスト / Feature Request
+description: |
+  新機能を提案する / Suggest a new feature
+labels: [feature]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        機能リクエストありがとうございます。以下の項目を記入してください。
+        Thank you for your feature request. Please fill in the following items.
+  - type: dropdown
+    id: component
+    attributes:
+      label: コンポーネント / Component
+      description: |
+        機能を追加したいコンポーネントを選択してください。
+        Select the component where you want this feature.
+      options:
+        - Frontend
+        - Chat Server
+        - TTS Server
+        - Infrastructure / モノレポ全体
+    validations:
+      required: true
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: 事前確認 / First Check
+      description: |
+        以下の項目を確認してください。
+        Please confirm the following.
+      options:
+        - label: |
+            GitHub で類似の提案を検索しましたが、見つかりませんでした。 / I searched and didn't find a similar request.
+          required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: 解決したい課題 / Problem to Solve
+      description: |
+        この機能で解決したい問題は何ですか？
+        What problem would this feature solve?
+      placeholder: |
+        現在は〇〇ができなくて困っています。
+        Currently, I can't do X and it's frustrating.
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: 提案する解決策 / Proposed Solution
+      description: |
+        どのような機能があれば解決しますか？
+        What feature would solve this problem?
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: 代替案 / Alternatives Considered
+      description: |
+        検討した代替案があれば記載してください。
+        Describe any alternative solutions you've considered.
+  - type: textarea
+    id: context
+    attributes:
+      label: 追加情報 / Additional Context
+      description: |
+        その他の情報やスクリーンショットがあれば追加してください。
+        Add any other context or screenshots.

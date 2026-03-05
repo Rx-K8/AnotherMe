@@ -1,47 +1,29 @@
 import { useCallback, useState } from "react"
-import { textToSpeech } from "@/api/ttsApi"
+import { voiceClone } from "@/api/ttsApi"
+
+interface GenerateAudioOptions {
+  audioFile: File
+  refText: string
+  speed?: number
+}
 
 export function useTTS() {
   const [isGenerating, setIsGenerating] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  const playAudio = useCallback((audioData: string, format: string) => {
-    const byteCharacters = atob(audioData)
-    const byteNumbers = new Array(byteCharacters.length)
-    for (let i = 0; i < byteCharacters.length; i++) {
-      byteNumbers[i] = byteCharacters.charCodeAt(i)
-    }
-    const byteArray = new Uint8Array(byteNumbers)
-
-    const mimeType = format === "wav" ? "audio/wav" : "audio/mpeg"
-
-    const blob = new Blob([byteArray], { type: mimeType })
-    const url = URL.createObjectURL(blob)
-
-    const audio = new Audio(url)
-    audio.play()
-
-    audio.onended = () => URL.revokeObjectURL(url)
-  }, [])
-
-  const speak = useCallback(
-    async (
-      text: string,
-      options?: {
-        format?: "wav" | "mp3"
-        speed?: number
-      },
-    ) => {
+  const generateAudio = useCallback(
+    async (text: string, options: GenerateAudioOptions): Promise<string> => {
       setIsGenerating(true)
       setError(null)
 
       try {
-        const response = await textToSpeech({
+        const response = await voiceClone({
+          audio_file: options.audioFile,
           input: text,
-          response_format: options?.format || "mp3",
-          speed: options?.speed || 1.0,
+          ref_text: options.refText,
+          speed: options.speed || 1.0,
         })
-        playAudio(response.audio_data, response.format)
+        return response.audio_data
       } catch (err) {
         const errorMessage =
           err instanceof Error ? err.message : "音声生成に失敗しました。"
@@ -51,8 +33,8 @@ export function useTTS() {
         setIsGenerating(false)
       }
     },
-    [playAudio],
+    [],
   )
 
-  return { speak, isGenerating, error }
+  return { generateAudio, isGenerating, error }
 }
